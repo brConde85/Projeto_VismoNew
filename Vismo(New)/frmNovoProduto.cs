@@ -114,7 +114,7 @@ namespace Vismo_New_
                         //libera o formulário de produto
                         txtFornec.BackColor = Color.White;
                         lblMsg.Text = "";
-
+                        cboFornec.Enabled = true;
                         txtNome.Enabled = true;
                         txtPreco.Enabled = true;
                         txtQtd.Enabled = true;
@@ -144,6 +144,26 @@ namespace Vismo_New_
                 cboPalavra.Enabled = false;
                 lblMsg.Text = "* Obrigatório.";
             }
+        }
+
+        private void CboFornec_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DataTable GetUF()
+            {
+                DataTable dataUf = new DataTable("fornecedor");
+                using (SqlConnection Connection = new SqlConnection(@"Data Source=BRCONDE\SQLEXPRESS;Initial Catalog=db_loja;Integrated Security=True"))
+                using (SqlCommand Command = new SqlCommand("SELECT codFornecedor, nome FROM fornecedor ORDER BY nome", Connection))
+                {
+                    Connection.Open();
+                    dataUf.Load(Command.ExecuteReader());
+                }
+                return dataUf;
+            }
+            cboFornec.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboFornec.DataSource = GetUF();
+            cboFornec.ValueMember = "codFornecedor";
+            cboFornec.DisplayMember = "nome";
+            cboFornec.Update();
         }
     }
 }
